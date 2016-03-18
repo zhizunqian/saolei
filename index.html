@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>扫雷</title>
+	<script src="jquery.js"></script>
+</head>
+<style>
+	body{
+		background: #000;
+	}
+	.box{
+		width: 720px;
+		height: 720px;
+		border: 1px solid #000;
+		background: #fff;
+		margin: 0 auto;
+	}
+	.line{
+		width: 38px;
+		height: 38px;
+		border: 1px solid #000;
+		float: left;
+		text-align: center;
+		line-height: 38px;
+		font-family: 微软雅黑;
+	}
+	.bei{
+		background-image: url(./img/sjq.jpg);
+		background-repeat: no-repeat;
+		background-size: 38px 38px;
+
+	}
+	.pink{
+		background: #fff;
+	}
+	.orange{
+		background: orange;
+	}
+	.yellow{
+		background: yellow;
+	}
+	.purple{
+		background: purple;
+	}
+	.green{
+		background: green;
+	}
+	.blue{
+		background: blue;
+	}
+	.islei{
+		background-image: url(./img/sl.jpg);
+		background-repeat: no-repeat;
+		background-size: 38px 38px;
+	}
+
+</style>
+<body>
+	<div class="box"></div>
+</body>
+<script>
+	$(function(){
+		var row=20;
+		var line="";
+		for(var i=0;i<row*row;i++){
+			line+="<div></div>";
+		}
+
+		$(".box").html(line); 
+		// 1------------------------画表格
+		$(".box").find("div").addClass(function(i){
+			return "line "+"bei";
+		});
+		$(".box div:lt(row)").removeClass();
+		$(".box div:gt(row*row-row)").removeClass();
+		$(".box div:nth-child(20n)").removeClass();
+		$(".box div:nth-child(20n+1)").removeClass();
+		// 2------------------------防雷
+		// 2-1----------------------记录雷的位置
+		$(".box div").each(function(i){
+			$(this).data("index",i);
+		})
+		$(".box .line").each(function(){
+			if(Math.random()>0.7){;
+				$(this).data("lei",true);
+			}
+		})
+		// 3-------------------------单击
+		$(".box div").click(function(){
+			if($(this).data("lei")){
+				alert("bow!!");	
+				$("div").addClass(function(i){
+					if($("div").eq(i).data("lei")){
+						return "islei";
+					}
+				})
+			}
+			else{
+				var xiabiao=$(this).data("index");
+				var shuzi=0;
+				if($(".box div").eq(xiabiao-1).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao+1).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao+row).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao-row).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao+(row+1)).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao-(row+1)).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao-(row-1)).data("lei")){shuzi++};
+				if($(".box div").eq(xiabiao+(row-1)).data("lei")){shuzi++};
+				$(this).html(shuzi).removeClass("bei").addClass("pink");
+			}
+		})
+
+		
+	})
+</script>
+</html>
